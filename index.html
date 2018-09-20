@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Firebase Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <p id="p">test</p>
+
+    <img id="img" src="">
+    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-database.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAZiAYo2p4Eg16egVHV-ijK9dM08Yt7Hk8",
+            authDomain: "home-4d824.firebaseapp.com",
+            databaseURL: "https://home-4d824.firebaseio.com",
+            projectId: "home-4d824",
+            storageBucket: "home-4d824.appspot.com",
+            messagingSenderId: "584860849839"
+        };
+        firebase.initializeApp(config);
+        var ref = firebase.database().ref('tracking/data');
+        ref.on("value", function (snapshot) {
+            document.getElementById("p").innerHTML = snapshot.val().kill[0]+","+snapshot.val().kill[1];
+            document.getElementById("img").src =
+                "https://maps.googleapis.com/maps/api/staticmap?center=" + snapshot.val().kill[0] + "," +
+                snapshot.val().kill[1] +
+                "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" + snapshot.val().kill[0] +
+                "," +
+                snapshot.val().kill[1] + "&key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8";
+        })
+    </script>
+</body>
+
+</html>
