@@ -15,13 +15,25 @@
     <img id="img" src="">
 
     <script>
+
+        /*
+         *获取最新的数据
+         */
         dweetio.get_latest_dweet_for("jia", function (err, dweet) {
             var dweet = dweet[0];
             console.log(dweet.thing); // The generated name
             console.log(dweet.content); // The content of the dweet
             console.log(dweet.created); // The create date of the dweet
             document.getElementById("twdata").innerHTML = dweet.content.hello;
-
+            document.getElementById("img").src =
+                "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
+                "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" + dweet.content
+                .hello +
+                "&key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8";
+                
+            /*
+             *监听远程数据实时更新
+             */
             dweetio.listen_for("jia", function (dweet) {
                 document.getElementById("twdata").innerHTML = dweet.content.hello;
                 document.getElementById("time").innerHTML = dweet.created;
