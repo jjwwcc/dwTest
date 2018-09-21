@@ -13,7 +13,7 @@
     <p id="twdata">等待连接...</p>
     <p id="time"> </p>
     <!-- <img id="img" src=""> -->
-    <div id="googleMap" style="width:100%;height:600px"></div>
+    <div id="googleMap" style="width:100%;height:550px">地图将在5秒后加载</div>
 
     <script>
         /*
@@ -59,8 +59,10 @@
                     map.setCenter(centerUpdate);
                     for (var i=0; i<markers.length; i++)
                     {
-                        markers[i].setMap(null);
+                        markers[i].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                        markers[i].setMap(map);
                     }
+                    markerUpdate.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
                     markerUpdate.setMap(map);
                     /*
                     document.getElementById("img").src =
