@@ -12,29 +12,89 @@
 <body>
     <p id="twdata">等待连接...</p>
     <p id="time"> </p>
-    <img id="img" src="">
+    <!-- <img id="img" src=""> -->
+    <div id="googleMap" style="width:100%;height:500px">加载地图...</div>
 
     <script>
-        dweetio.get_latest_dweet_for("jia", function (err, dweet) {
-            var dweet = dweet[0];
-            console.log(dweet.thing); // The generated name
-            console.log(dweet.content); // The content of the dweet
-            console.log(dweet.created); // The create date of the dweet
-            document.getElementById("twdata").innerHTML = dweet.content.hello;
+        /*
+         *获取最新的数据
+         */
+        var dweet;
+        var jsonVal;
+        var map;
+        var marker;
 
-            dweetio.listen_for("jia", function (dweet) {
+        function dweetConnect() {
+
+            dweetio.get_latest_dweet_for("jia", function (err, dweet) {
+                dweet = dweet[0];
+                jsonVal = dweet.content.hello;
+                console.log(dweet.thing); // The generated name
+                console.log(dweet.content); // The content of the dweet
+                console.log(dweet.created); // The create date of the dweet
                 document.getElementById("twdata").innerHTML = dweet.content.hello;
-                document.getElementById("time").innerHTML = dweet.created;
-                document.getElementById("img").src =
-                    "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
-                    "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" + dweet.content
-                    .hello +
-                    "&key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8";
+                /* document.getElementById("img").src =
+                     "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
+                     "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" + dweet.content
+                     .hello +
+                     "&key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8";
+                     */
+
+                /*
+                 *监听远程数据实时更新
+                 */
+                dweetio.listen_for("jia", function (dweet) {
+                    document.getElementById("twdata").innerHTML = dweet.content.hello;
+                    document.getElementById("time").innerHTML = dweet.created;
+                    jsonValupdate = dweet.content.hello;
+                    var latUpdate = jsonValupdate.split(",")[0];
+                    var lngUpdate = jsonValupdate.split(",")[1];
+                    var centerUpdate = new google.maps.LatLng(latUpdate, lngUpdate);
+                    var markerUpdate = new google.maps.Marker({
+                        position: centerUpdate,
+                        animation: google.maps.Animation.BOUNCE
+                    });
+                    map.setCenter(centerUpdate);
+                    markerUpdate.setMap(map);
+                    document.getElementById("img").src =
+                        "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
+                        "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" +
+                        dweet.content
+                        .hello +
+                        "&key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8";
+                });
             });
-        });
+
+        }
+
+
+        function myMap() {
+            dweetConnect();
+            setTimeout(function () {
+                var lat = jsonVal.split(",")[0];
+                var lng = jsonVal.split(",")[1];
+                var center = new google.maps.LatLng(lat, lng); //new google.maps.LatLng(jsonVal);
+                var mapProp = {
+                    center: center,
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.HYBRID
+                };
+
+                marker = new google.maps.Marker({
+                    position: center,
+                    animation: google.maps.Animation.DROP
+                });
+
+                map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+                marker.setMap(map);
+                map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+
+            }, 5000)
+
+        }
     </script>
 
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8&callback=myMap"></script>
 </body>
 
 </html>
