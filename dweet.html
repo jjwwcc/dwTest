@@ -24,15 +24,17 @@
         var map;
         var marker;
         var markers=[];
+        var created;
 
         function dweetConnect() {
 
             dweetio.get_latest_dweet_for("jia", function (err, dweet) {
                 dweet = dweet[0];
                 jsonVal = dweet.content.hello;
+                created = dweet.created.getHours() + ":" + dweet.created.getMinutes();
                 console.log(dweet.thing); // The generated name
                 console.log(dweet.content); // The content of the dweet
-                console.log(dweet.created); // The create date of the dweet
+                console.log(created); // The create date of the dweet
                 document.getElementById("twdata").innerHTML = dweet.content.hello;
                 /* document.getElementById("img").src =
                      "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
@@ -53,7 +55,8 @@
                     var centerUpdate = new google.maps.LatLng(latUpdate, lngUpdate);
                     var markerUpdate = new google.maps.Marker({
                         position: centerUpdate,
-                        animation: google.maps.Animation.BOUNCE
+                        animation: google.maps.Animation.BOUNCE,
+                        label: {color: "#FFFFFF", fontWeight: "bold", fontSize:"35", text:created }
                     });
                     markers.push(markerUpdate);
                     map.setCenter(centerUpdate);
