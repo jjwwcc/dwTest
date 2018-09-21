@@ -55,7 +55,7 @@
                         animation: google.maps.Animation.BOUNCE
                     });
                     map.setCenter(centerUpdate);
-                    markerUpdate.setMap(map);
+                    markerUpdate.setPosition(centerUpdate);
                     document.getElementById("img").src =
                         "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
                         "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" +
