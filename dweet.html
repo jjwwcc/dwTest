@@ -23,6 +23,7 @@
         var jsonVal;
         var map;
         var marker;
+        var markers=[];
 
         function dweetConnect() {
 
@@ -54,14 +55,21 @@
                         position: centerUpdate,
                         animation: google.maps.Animation.BOUNCE
                     });
+                    markers.push(markerUpdate);
                     map.setCenter(centerUpdate);
-                    markerUpdate.setPosition(centerUpdate);
+                    for (var i=0; i<markers.length; i++)
+                    {
+                        markers[i].setMap(null);
+                    }
+                    markerUpdate.setMap(map);
+                    /*
                     document.getElementById("img").src =
                         "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
                         "&zoom=15&size=1500x900&maptype=satellite&markers=color:blue%7Clabel:S%7C" +
                         dweet.content
                         .hello +
                         "&key=AIzaSyA6mOZLP_W0KGsdEmgek-mcSLf5sun9MY8";
+                        */
                 });
             });
 
