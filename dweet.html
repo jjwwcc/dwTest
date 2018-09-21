@@ -23,7 +23,7 @@
         var jsonVal;
         var map;
         var marker;
-        var markers=[];
+        var markers = [];
         var created;
 
         function dweetConnect() {
@@ -31,10 +31,9 @@
             dweetio.get_latest_dweet_for("jia", function (err, dweet) {
                 dweet = dweet[0];
                 jsonVal = dweet.content.hello;
-                created = dweet.created.getHours() + ":" + dweet.created.getMinutes();
                 console.log(dweet.thing); // The generated name
                 console.log(dweet.content); // The content of the dweet
-                console.log(created); // The create date of the dweet
+                console.log(dweet.created); // The create date of the dweet
                 document.getElementById("twdata").innerHTML = dweet.content.hello;
                 /* document.getElementById("img").src =
                      "https://maps.googleapis.com/maps/api/staticmap?center=" + dweet.content.hello +
@@ -49,6 +48,7 @@
                 dweetio.listen_for("jia", function (dweet) {
                     document.getElementById("twdata").innerHTML = dweet.content.hello;
                     document.getElementById("time").innerHTML = dweet.created;
+                    created = dweet.created.getHours() + ":" + dweet.created.getMinutes();
                     jsonValupdate = dweet.content.hello;
                     var latUpdate = jsonValupdate.split(",")[0];
                     var lngUpdate = jsonValupdate.split(",")[1];
@@ -56,12 +56,16 @@
                     var markerUpdate = new google.maps.Marker({
                         position: centerUpdate,
                         animation: google.maps.Animation.BOUNCE,
-                        label: {color: "#FFFFFF", fontWeight: "bold", fontSize:"18px", text:created }
+                        label: {
+                            color: "#FFFFFF",
+                            fontWeight: "bold",
+                            fontSize: "18px",
+                            text: created
+                        }
                     });
                     markers.push(markerUpdate);
                     map.setCenter(centerUpdate);
-                    for (var i=0; i<markers.length; i++)
-                    {
+                    for (var i = 0; i < markers.length; i++) {
                         markers[i].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
                         markers[i].setMap(map);
                     }
