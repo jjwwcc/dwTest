@@ -1,41 +1,74 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>实时路况图层</title>
-    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
     <script src="https://webapi.amap.com/maps?v=1.4.10&key=75e7351ff4cbab6fd0de3437ce52795b"></script>
-    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <!--  <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
 </head>
+
 <body>
-<div id="container"></div>
-<div class="button-group">
-    <input type="button" class="button" id="control" value="显示/隐藏实时路况"/>
-</div>
-<script>
-    var map = new AMap.Map('container', {
-        resizeEnable: true,
-        center: [113.25316, 23.087588],
-        zoom: 16
-    });
-    //实时路况图层
-    var trafficLayer = new AMap.TileLayer.Traffic({
-        zIndex: 18
-    });
-    trafficLayer.setMap(map);
-	
-    var isVisible = true;
-    AMap.event.addDomListener(document.getElementById('control'), 'click', function() {
-        if (isVisible) {
-            trafficLayer.hide();
-            isVisible = false;
-        } else {
-            trafficLayer.show();
-            isVisible = true;
+    <div id="container"></div>
+    <div class="button-group">
+        <input type="button" class="button" id="control" value="显示/隐藏实时路况" />
+    </div>
+    <script>
+        var lat;
+        var lng;
+        navigator.geolocation.getCurrentPosition(function (position) {
+
+            // Get the coordinates of the current position.
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+
+        }, function error(err) {
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+        });
+
+        if (lat == undefined || lng == undefined) {
+            console.log(lat);
+            console.log(lng);
+            lat = 23.087588;
+            lng = 113.25316;
         }
-    }, false);
-</script>
+
+
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            center: [lng, lat],
+            zoom: 16
+        });
+        //实时路况图层
+        var trafficLayer = new AMap.TileLayer.Traffic({
+            zIndex: 18
+        });
+        trafficLayer.setMap(map);
+        console.log(lat);
+        console.log(lng);
+
+        // 构造官方卫星、路网图层
+        var satelliteLayer = new AMap.TileLayer.Satellite();
+        //var roadNetLayer =  new AMap.TileLayer.RoadNet();
+
+        //批量添加图层
+        map.add([satelliteLayer]);
+
+
+        var isVisible = true;
+        AMap.event.addDomListener(document.getElementById('control'), 'click', function () {
+            if (isVisible) {
+                trafficLayer.hide();
+                isVisible = false;
+            } else {
+                trafficLayer.show();
+                isVisible = true;
+            }
+        }, false);
+    </script>
 </body>
+
 </html>
