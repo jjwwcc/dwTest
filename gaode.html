@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
     <div id="container"></div>
     <div class="button-group">
         <input type="button" class="button" id="control" value="显示/隐藏实时路况" />
@@ -32,7 +33,7 @@
         if (lat == undefined || lng == undefined) {
             console.log(lat);
             console.log(lng);
-            lat = 23.087588;
+            lat = 23.087595;
             lng = 113.25316;
         }
 
@@ -47,6 +48,8 @@
             zIndex: 18
         });
         trafficLayer.setMap(map);
+
+        alert(lat);
         console.log(lat);
         console.log(lng);
 
