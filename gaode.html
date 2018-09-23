@@ -37,40 +37,47 @@
             lng = 113.25316;
         }
 
+        setTimeout(
+            function () {
 
-        var map = new AMap.Map('container', {
-            resizeEnable: true,
-            center: [lng, lat],
-            zoom: 16
-        });
-        //实时路况图层
-        var trafficLayer = new AMap.TileLayer.Traffic({
-            zIndex: 18
-        });
-        trafficLayer.setMap(map);
+                var map = new AMap.Map('container', {
+                    resizeEnable: true,
+                    center: [lng, lat],
+                    zoom: 16
+                });
+                //实时路况图层
+                var trafficLayer = new AMap.TileLayer.Traffic({
+                    zIndex: 18
+                });
+                trafficLayer.setMap(map);
 
-        alert(lat);
-        console.log(lat);
-        console.log(lng);
+                alert(lat);
+                console.log(lat);
+                console.log(lng);
 
-        // 构造官方卫星、路网图层
-        var satelliteLayer = new AMap.TileLayer.Satellite();
-        //var roadNetLayer =  new AMap.TileLayer.RoadNet();
+                // 构造官方卫星、路网图层
+                var satelliteLayer = new AMap.TileLayer.Satellite();
+                //var roadNetLayer =  new AMap.TileLayer.RoadNet();
 
-        //批量添加图层
-        map.add([satelliteLayer]);
+                //批量添加图层
+                map.add([satelliteLayer]);
 
 
-        var isVisible = true;
-        AMap.event.addDomListener(document.getElementById('control'), 'click', function () {
-            if (isVisible) {
-                trafficLayer.hide();
-                isVisible = false;
-            } else {
-                trafficLayer.show();
-                isVisible = true;
-            }
-        }, false);
+                var isVisible = true;
+                AMap.event.addDomListener(document.getElementById('control'), 'click', function () {
+                    if (isVisible) {
+                        trafficLayer.hide();
+                        isVisible = false;
+                    } else {
+                        trafficLayer.show();
+                        isVisible = true;
+                    }
+                }, false);
+
+
+
+            }, 5000
+        )
     </script>
 </body>
 
