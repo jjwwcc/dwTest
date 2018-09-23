@@ -33,16 +33,28 @@
         if (lat == undefined || lng == undefined) {
             console.log(lat);
             console.log(lng);
-            lat = 23.085258;
-            lng = 113.258734;
+            lat = 23.08877828;
+            lng = 113.25202899;
         }
 
         setTimeout(
             function () {
 
+                var lnglat = [lat, lng];
+                var resLnglat;
+
+                AMap.convertFrom(lnglat, 'gps', function (status, result) {
+                    if (result.info === 'ok') {
+                        resLnglat = result.locations[0];
+                        m2 = new AMap.Marker({
+                            position: resLnglat,
+                        });
+                    }
+                })
+
                 var map = new AMap.Map('container', {
                     resizeEnable: true,
-                    center: [lng, lat],
+                    center: resLnglat,
                     zoom: 16
                 });
 
@@ -54,7 +66,7 @@
 
                 //marker层
                 var marker = new AMap.Marker();
-                marker.setMap(map);            
+                marker.setMap(map);
 
                 console.log(lat);
                 console.log(lng);
