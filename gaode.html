@@ -19,14 +19,16 @@
         <input type="button" class="button" id="control" value="显示/隐藏实时路况" />
     </div>
     <script>
+        //初始化全局变量
         var lat;
         var lng;
         var map;
         var marker;
 
+        //获取浏览器地理位置
         navigator.geolocation.getCurrentPosition(function (position) {
 
-            // Get the coordinates of the current position.
+            // 得到坐标
             lat = position.coords.latitude;
             lng = position.coords.longitude;
 
@@ -34,6 +36,7 @@
             console.warn('ERROR(' + err.code + '): ' + err.message);
         });
 
+        //如果获取位置失败，设置默认位置
         if (lat == undefined || lng == undefined) {
             console.log(lat);
             console.log(lng);
@@ -41,12 +44,16 @@
             lng = 113.25202899;
         }
 
+        /*
+         * 延迟运行以便等待获取到浏览器地理位置
+         */
         setTimeout(
             function () {
 
+                //转化坐标为火星坐标
                 var gcjloc = transformFromWGSToGCJ(lng, lat);
 
-
+                //建立高德地图
                 map = new AMap.Map('container', {
                     resizeEnable: true,
                     center: [gcjloc.lng, gcjloc.lat],
@@ -63,6 +70,7 @@
                 marker = new AMap.Marker();
                 marker.setMap(map);
 
+                //调试信息
                 console.log(lat);
                 console.log(gcjloc.lat);
                 console.log(lng);
@@ -75,6 +83,7 @@
                 //批量添加图层
                 map.add([satelliteLayer]);
 
+                //控制按钮功能
                 var isVisible = true;
                 AMap.event.addDomListener(document.getElementById('control'), 'click', function () {
                     if (isVisible) {
@@ -89,17 +98,25 @@
             }, 2000
         );
 
+        /*
+         * 建立地理位置监听
+         */
         var watchID = navigator.geolocation.watchPosition(success, error);
 
+        //回调成功操作
         function success(position) {
 
+            //更新坐标
             lat = position.coords.latitude;
             lng = position.coords.longitude;
-            var gcjloc = transformFromWGSToGCJ(lng, lat);
-            info = "您当前所在的位置：经度" + lat + ";纬度：" + lng;
-            map.setCenter([gcjloc.lng, gcjloc.lat]);
-            console.log(info);
 
+            //纠偏新坐标
+            var gcjloc = transformFromWGSToGCJ(lng, lat);
+
+            //设置新的地图中心
+            map.setCenter([gcjloc.lng, gcjloc.lat]);
+
+            //设置新的地图marker
             marker = new AMap.Marker({
                 position: [gcjloc.lng, gcjloc.lat], // 基点位置
             });
@@ -107,6 +124,7 @@
 
         }
 
+        //回调失败错误
         function error(error) {
             switch (error.code) {
                 case error.TIMEOUT:
