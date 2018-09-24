@@ -125,6 +125,10 @@
             //设置新的地图marker
             marker = new AMap.Marker({
                 position: [gcjloc.lng, gcjloc.lat], // 基点位置
+                icon: new AMap.Icon({
+                    size: new AMap.Size(25, 25), //图标大小
+                    imageSize: new AMap.Size(25, 25)
+                })
             });
             map.add(marker);
 
