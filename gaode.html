@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>实时路况图层</title>
+    <title>实时路况</title>
     <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
     <script src="https://webapi.amap.com/maps?v=1.4.10&key=75e7351ff4cbab6fd0de3437ce52795b"></script>
     <script src="wgs2mars.min.js"></script>
@@ -67,7 +67,13 @@
                 trafficLayer.setMap(map);
 
                 //marker层
-                marker = new AMap.Marker();
+                marker = new AMap.Marker({
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(25, 25), //图标大小
+                        imageSize: new AMap.Size(25, 25)
+                    })
+
+                });
                 marker.setMap(map);
 
                 //调试信息
