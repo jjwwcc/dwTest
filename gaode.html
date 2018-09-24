@@ -8,6 +8,7 @@
     <title>实时路况图层</title>
     <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
     <script src="https://webapi.amap.com/maps?v=1.4.10&key=75e7351ff4cbab6fd0de3437ce52795b"></script>
+    <script src="wgs2mars.min.js"></script>
     <!--  <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
 </head>
 
@@ -40,21 +41,12 @@
         setTimeout(
             function () {
 
-                var lnglat = [lat, lng];
-                var resLnglat;
+                var gcjloc = transformFromWGSToGCJ(lng, lat);
 
-                AMap.convertFrom(lnglat, 'gps', function (status, result) {
-                    if (result.info === 'ok') {
-                        resLnglat = result.locations[0];
-                        m2 = new AMap.Marker({
-                            position: resLnglat,
-                        });
-                    }
-                })
-
+               
                 var map = new AMap.Map('container', {
                     resizeEnable: true,
-                    center: resLnglat,
+                    center: [gcjloc.lng, gcjloc.lat],
                     zoom: 16
                 });
 
@@ -69,7 +61,9 @@
                 marker.setMap(map);
 
                 console.log(lat);
+                console.log(gcjloc.lat);
                 console.log(lng);
+                console.log(gcjloc.lng);
 
                 // 构造官方卫星、路网图层
                 var satelliteLayer = new AMap.TileLayer.Satellite();
