@@ -6,8 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>实时路况</title>
+    <style type="text/css">
+        #panel {
+            position: fixed;
+            background-color: white;
+            max-height: 90%;
+            overflow-y: auto;
+            top: 10px;
+            right: 10px;
+            width: 280px;
+        }
+
+        #search {
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            background: #fff none repeat scroll 0 0;
+            border: 1px solid #ccc;
+            margin: 10px auto;
+            padding: 6px;
+            font-size: 14px;
+        }
+    </style>
     <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css" />
-    <script src="https://webapi.amap.com/maps?v=1.4.10&key=75e7351ff4cbab6fd0de3437ce52795b"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.10&key=75e7351ff4cbab6fd0de3437ce52795b&plugin=AMap.Driving&plugin=AMap.Autocomplete&plugin=AMap.ToolBar"></script>
     <script src="wgs2mars.min.js"></script>
     <!--  <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
 </head>
@@ -15,6 +37,26 @@
 <body>
 
     <div id="container">获取当前位置中...</div>
+    <div id="panel"></div>
+    <div id="search">
+        <table>
+            <tr>
+                <td>
+                    <label>目的地：</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="tipinput" />
+                </td>
+                <!--   
+                   <td>
+                    <input type="button" value="ok" onclick="route();" />
+                   </td>
+                -->
+            </tr>
+        </table>
+    </div>
     <div class="button-group">
         <input type="button" class="button" id="control" value="显示/隐藏实时路况" />
     </div>
@@ -24,6 +66,8 @@
         var lng;
         var map;
         var marker;
+        var driving;
+        var auto;
 
         //获取浏览器地理位置
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -101,8 +145,44 @@
                     }
                 }, false);
 
-            }, 2000
-        );
+                auto = new AMap.Autocomplete({
+                    input: "tipinput"
+                });
+
+                //构造路线导航类
+                driving = new AMap.Driving({
+                    map: map,
+                    panel: "panel"
+                });
+
+                //为地图注册click事件获取鼠标点击出的经纬度坐标
+                var clickEventListener = map.on('click', function (e) {
+                    console.log(e.lnglat.getLng());
+                    var targetLng = e.lnglat.getLng();
+                    var targetLat = e.lnglat.getLat();
+                    // 根据起终点经纬度规划驾车导航路线
+                    driving.search([gcjloc.lng, gcjloc.lat], [targetLng, targetLat]);
+
+                });
+
+                AMap.event.addListener(auto, "select", select); //注册监听，当选中某条记录时会触发
+                function select(e) {
+                    if (e.poi && e.poi.location) {
+                        map.setZoom(15);
+                        map.setCenter(e.poi.location);
+                    }
+                }
+
+            }, 2000);
+
+
+
+
+        function route() {
+            console.log(document.getElementById("tipinput").value);
+
+        }
+
 
         /*
          * 建立地理位置监听
