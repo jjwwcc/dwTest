@@ -188,7 +188,11 @@
         /*
          * 建立地理位置监听
          */
-        var watchID = navigator.geolocation.watchPosition(success, error);
+        var watchID = navigator.geolocation.watchPosition(success, error, options);
+
+        options = {
+            maximumAge: 5000
+        };
 
         //回调成功操作
         function success(position) {
