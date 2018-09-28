@@ -20,6 +20,7 @@
 
         #search {
             position: absolute;
+            visibility: hidden;
             top: 5px;
             left: 10px;
             background: #fff none repeat scroll 0 0;
@@ -167,7 +168,7 @@
                     driving.search([gcjloc.lng, gcjloc.lat], [targetLng, targetLat]);
 
                 });
-                
+
                 //自动输入与选择
                 AMap.event.addListener(auto, "select", select); //注册监听，当选中某条记录时会触发
                 function select(e) {
@@ -180,7 +181,7 @@
             }, 2000);
 
         function controlInput() {
-            console.log("ok");
+
             var search = document.getElementById("search");
             if (search.style.visibility === "hidden") {
                 search.style.visibility = "visible";
