@@ -60,6 +60,8 @@
     </div>
     <div class="button-group">
         <input type="button" class="button" id="control" value="显示/隐藏实时路况" />
+        <input type="button" class="button" value="显示/隐藏导航栏" onclick="controlInput()" />
+        <input type="button" class="button" value="取消路径规划" onclick="driving.clear()" />
     </div>
     <script>
         //初始化全局变量
@@ -165,7 +167,8 @@
                     driving.search([gcjloc.lng, gcjloc.lat], [targetLng, targetLat]);
 
                 });
-
+                
+                //自动输入与选择
                 AMap.event.addListener(auto, "select", select); //注册监听，当选中某条记录时会触发
                 function select(e) {
                     if (e.poi && e.poi.location) {
@@ -176,11 +179,14 @@
 
             }, 2000);
 
-
-
-
-        function route() {
-            console.log(document.getElementById("tipinput").value);
+        function controlInput() {
+            console.log("ok");
+            var search = document.getElementById("search");
+            if (search.style.visibility === "hidden") {
+                search.style.visibility = "visible";
+            } else {
+                search.style.visibility = "hidden";
+            }
 
         }
 
