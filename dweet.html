@@ -9,7 +9,7 @@
     <script src="dweet.io.js"></script>
 </head>
 
-<body>
+<body style="background-color: antiquewhite;">
     <p id="twdata">等待连接...</p>
     <p id="time"> </p>
     <!-- <img id="img" src=""> -->
@@ -20,7 +20,7 @@
          *获取最新的数据
          */
         var dweet;
-        var jsonVal;
+        var jsonVal="23.0876583,113.2531302";
         var map;
         var marker;
         var markers = [];
@@ -106,7 +106,7 @@
                 marker.setMap(map);
                 map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
 
-            }, 5000)
+            }, 2000)
 
         }
     </script>
